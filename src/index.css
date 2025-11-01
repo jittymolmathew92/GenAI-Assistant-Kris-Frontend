@@ -42,12 +42,16 @@
     vertical-align: middle;
     padding: 5px 10px 5px 10px !important;
 }
-#search_button {
+.search_button {
     background-color: #e7e7e7;
     border-radius: 0px;
     height: 35px;
     padding: 5px;
     vertical-align: middle;
+    border: 1px solid #9ab4cc;
+}
+.search_button:hover {
+  border: 1px solid #0f1419;
 }
 
 a {

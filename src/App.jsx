@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import chatbot from './image/chatbot.jpg';
 import sendbtn from './image/sendbtn.png';
+import savebtn from './image/savebtn.png';
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -40,9 +41,11 @@ function App() {
       <div id="main_search">
         <input id="main_search_input" value={input} onChange={(e) => setInput(e.target.value)} style={{ width: '80%' }}
         placeholder="Type a message..." />
-        <button id="search_button" onClick={sendMessage}>
-          <img src={sendbtn} width="20" style={{borderLeft: "1px solid #D7D7D7", padding: "0 0 0 5px"}} />
-          {/* <img src={sendbtn} /> */}
+        <button class="search_button" onClick={sendMessage}>
+          <img src={sendbtn} width="20" style={{padding: "0 0 0 5px"}} />
+        </button>
+        <button class="search_button">
+          <img src={savebtn} width="20" style={{padding: "0 0 0 5px"}} />
         </button>
       </div>
       
