@@ -28,7 +28,7 @@ function App() {
         <h2 style={{display: "inline-block"}}>Kris Bot</h2>
       </div>
       
-      <div class="content-box">
+      <div className="content-box">
         {messages.map((m, i) => (
           <div key={i} style={{ margin: '10px 0' }}>
             
@@ -41,11 +41,8 @@ function App() {
       <div id="main_search">
         <input id="main_search_input" value={input} onChange={(e) => setInput(e.target.value)} style={{ width: '80%' }}
         placeholder="Type a message..." />
-        <button class="search_button" onClick={sendMessage}>
+        <button className="search_button" onClick={sendMessage}>
           <img src={sendbtn} width="20" style={{padding: "0 0 0 5px"}} />
-        </button>
-        <button class="search_button">
-          <img src={savebtn} width="20" style={{padding: "0 0 0 5px"}} />
         </button>
       </div>
       
