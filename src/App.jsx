@@ -7,18 +7,65 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  
   const sendMessage = async () => {
     const newMessages = [...messages, { role: 'user', content: input }];
     setMessages(newMessages);
     setInput('');
     setLoading(true);
+
     const res = await fetch('http://localhost:3001/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: newMessages }),
     });
-    const data = await res.json();
-    setMessages([...newMessages, { role: 'assistant', content: data.message }]);
+
+    console.log("res",res);
+
+    //Stream text progressively instead of waiting for JSON
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder('utf-8');
+    let buffer = '';
+    let fullResponse = '';
+    let assistantMessage = { role: 'assistant', content: '' };
+
+    // Add placeholder assistant message
+    setMessages(prev => [...prev, assistantMessage]);
+
+    while (true) {
+    const { done, value } = await reader.read();
+    console.log("done", done);
+    console.log("value", value);
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+
+    // Split by newline since Ollama streams one JSON per line
+    const lines = buffer.split('\n');
+    buffer = lines.pop(); 
+
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      try {
+        const parsed = JSON.parse(line);
+        if (parsed.message?.content) {
+          fullResponse += parsed.message.content;
+          setMessages(prev => {
+            const updated = [...prev];
+            updated[updated.length - 1] = {
+              role: 'assistant',
+              content: fullResponse,
+            };
+            return updated;
+          });
+        }
+      } catch (err) {
+        console.error('Error parsing line:', err);
+      }
+    }
+
+    }
+
     setLoading(false);
   };
   return (
